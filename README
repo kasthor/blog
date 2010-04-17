@@ -1,3 +1,7 @@
 BLOG!
 
-Well.. i'm introducing myself to new agile technologies, as practice i'm getting my website-blog using Sinatra and all that cool stuff
+Well.. i'm introducing myself to new agile technologies, as practice i'm building my website-blog using Ruby-Sinatra, so here's a peek
+
+Right now is in very early stages
+
+Also one of the goals is to start using HTML5 as much as possible, any compatibility issue will not be specially handled, i'll probably check all my work just on webkit browsers and some times in Firefox. IE compatibility may be checked but not enforced.

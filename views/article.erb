@@ -1,0 +1,46 @@
+<div class="article">
+    <h1 id="article_title"><%= @article.title %></h1>
+    <div class="publication-date">
+	<div class="day"><%= @article.created_at.strftime("%d") %></div>
+	<div class="month"><%= @article.created_at.strftime("%b") %></div>
+    </div>
+    <div class="body" id="article_content">
+	<%= @article.content %>
+    </div>
+
+    <% if authorized? %>
+    <form method="post" action="save" id="article_save">
+	<input type="hidden" name="article[id]" value="<%= @article.id %>"/>
+	<input type="hidden" name="article[title]"/>	
+	<input type="hidden" name="article[content]"/>	
+    </form>
+    <div class="edit"><a href="#" onClick="return toggleArticleContentEditable( this )">edit</a></div>
+    <script>
+	function toggleArticleContentEditable( object ){
+		var editable;
+		if ( object.innerHTML == "edit" ){
+			editable = true;
+			object.innerHTML = "save"
+		} else if ( object.innerHTML == "save" ) {
+			editable = false;
+			saveArticle();
+			object.innerHTML = "edit";
+		}
+
+		document.getElementById("article_title").contentEditable = editable;
+		document.getElementById("article_content").contentEditable = editable;
+
+		return false;
+	}
+	function saveArticle()
+	{
+		var theForm = document.forms["article_save"]
+		
+		theForm.elements["article[title]"].value = document.getElementById("article_title").innerHTML;
+		theForm.elements["article[content]"].value = document.getElementById("article_content").innerHTML;
+	
+		theForm.submit();
+	}
+    </script>
+    <% end %>
+</div>

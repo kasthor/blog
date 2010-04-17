@@ -1,0 +1,10 @@
+<div class="article">
+	<form id="article" method="post" action="save">
+		<label>Title</label>
+		<input name="article[title]" value="<%= @article.title if @article %>"/>
+		<label>Content</label>
+		<textarea name="article[content]"><%= @article.content if @article %></textarea>
+		<input type="hidden" name="id" value="<%= @article.id if @article %>" />
+		<input type="submit"/>
+	</form>
+</div>
