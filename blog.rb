@@ -46,7 +46,7 @@ end
 get '/' do	
 	articles = Article.all(:limit => 1, :order=> :updated_at.desc)
 	@article = articles.pop
-	erb :article
+	erb :article unless @article.nil?
 end
 
 
