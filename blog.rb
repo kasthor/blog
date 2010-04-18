@@ -84,7 +84,5 @@ end
 
 get '/article/:id' do
 	@article = Article.get(params[:id])
-	if @article
-		erb :article
-	end
+	erb :article unless @article.nil?
 end
