@@ -12,7 +12,6 @@ class Article
 	property :content,	String
 	property :created_at,	DateTime
 	property :updated_at,	DateTime
-
 	has n,	:tag_references
 end
 
@@ -33,10 +32,23 @@ class Tag
 	has n,	:tag_references
 end
 
+class Author
+	include DataMapper::Resource
+
+	property :id,		Serial
+	property :username,	String
+	# TODO: Change this to a "Password" Type
+	property :password,	String
+	property :FullName,	String
+	has n, 	:articles
+end
+
 DataMapper.auto_upgrade!
 
 before do
-	@twitter_content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas at massa quis felis hendrerit ultricies eget nec est. In nulla sapien"
+	@twitter_content = env['REMOTE_USER']
+
+	#"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas at massa quis felis hendrerit ultricies eget nec est. In nulla sapien"
 end
 
 helpers do
