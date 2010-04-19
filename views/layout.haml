@@ -1,0 +1,19 @@
+%html
+	%head
+		%link{:href=>"/css/styles.css",:rel=>"stylesheet"}
+	%body
+		%header
+			%em= @twitter_content
+			.beta= "Beta"
+			%h1= "kasthor.com"
+		.articles
+			= yield
+		.navigator
+			%h1= "Topics"
+			%ul
+				%li= "Lorem"
+		.navigator 
+			%h1= "Links"
+			%ul
+				%li= "Link"
+		%footer= "Copyleft 2010"

@@ -1,0 +1,12 @@
+.article
+	%table.list{:border=>0}
+		- @articles.each_with_index do |article, i|
+			%tr
+				%td
+					%a{:href=>article.id}= article.title
+				%td
+					%a{:href=>"#{article.id}/delete"} Delete
+		%tr
+			%td
+			%td
+				%a{:href=>"add"} add
