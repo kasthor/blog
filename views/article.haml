@@ -1,0 +1,41 @@
+.article
+	%h1#article_title= @article.title
+	.publication-date
+		.day= @article.created_at.strftime("%d")
+		.month= @article.created_at.strftime("%b")
+	#article_content.body 
+		= @article.content
+	- if authorized?
+		%form#article_save{:method => 'post',:action => 'save'}
+			%input{:type => 'hidden',:name => 'article[id]', :value => @article.id}
+			%input{:type => 'hidden',:name => 'article[title]'}
+			%input{:type => 'hidden',:name => 'article[content]'}
+		.edit
+			%a#edit{:href => '#'}= "edit"
+		:javascript
+			function toggleArticleContentEditable(){
+				var editable;
+				if ( this.innerHTML == "edit" ){
+					editable = true;
+					this.innerHTML = "save"
+				} else if ( this.innerHTML == "save" ) {
+					editable = false;
+					saveArticle();
+					this.innerHTML = "edit";
+				}
+
+				document.getElementById("article_title").contentEditable = editable;
+				document.getElementById("article_content").contentEditable = editable;
+
+				return false;
+			}
+			function saveArticle()
+			{
+				var theForm = document.forms["article_save"]
+				
+				theForm.elements["article[title]"].value = document.getElementById("article_title").innerHTML;
+				theForm.elements["article[content]"].value = document.getElementById("article_content").innerHTML;
+			
+				theForm.submit();
+			}
+			document.getElementById('edit').addEventListener( "click", toggleArticleContentEditable, false );

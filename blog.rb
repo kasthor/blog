@@ -1,6 +1,9 @@
+require 'haml'
 require 'dm-core'
 require 'dm-timestamps'
+require 'dm-aggregates'
 require 'lib/authorization'
+require 'lib/twitter'
 
 DataMapper::setup(:default, "sqlite3://#{Dir.pwd}/articles.db")
 
@@ -43,22 +46,40 @@ class Author
 	has n, 	:articles
 end
 
-DataMapper.auto_upgrade!
+class Twit
+	include DataMapper::Resource
 
-before do
-	@twitter_content = env['REMOTE_USER']
+	property :id,		Serial
+	property :text,		String		
+	property :created_at,	DateTime
+	property :type,		String
 
-	#"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas at massa quis felis hendrerit ultricies eget nec est. In nulla sapien"
+	def set_type
+		return self.type = 'link' if self.text =~ /#l\b/
+		return self.type = 'quote' if self.text =~ /#q\b/
+	end
+
 end
+
+DataMapper.auto_upgrade!
 
 helpers do
 	include Sinatra::Authorization
+	include Sinatra::Twitter
+
+end
+
+before do
+	load_twits
+
+	@twit = Twit.first(:order => :id.desc, :type => 'quote')
+	@twitter_content = @twit.text unless @twit.nil?
 end
 
 get '/' do	
 	articles = Article.all(:limit => 1, :order=> :updated_at.desc)
 	@article = articles.pop
-	erb :article unless @article.nil?
+	haml :article unless @article.nil?
 end
 
 
@@ -70,7 +91,7 @@ get '/article/add' do
 	@article.content = "<p>Body goes here</p>"
 	
 	@article.save
-	erb :article
+	haml :article
 end
 
 post '/article/save' do
@@ -84,7 +105,7 @@ end
 get '/article/list' do
 	require_admin
 	@articles = Article.all(:order =>[:created_at.desc])	
-	erb :list
+	haml :list
 end
 
 get '/article/:id/delete' do
@@ -96,5 +117,5 @@ end
 
 get '/article/:id' do
 	@article = Article.get(params[:id])
-	erb :article unless @article.nil?
+	haml :article unless @article.nil?
 end
