@@ -14,7 +14,7 @@ module Sinatra
 				t = Twit.new(m.select{|k,v| k == 'id' or k == 'text' or k == 'created_at'})
 				t.set_type
 				t.save
-			end if xml['status']
+			end unless xml.nil? or not xml['status']
 		end
 	end
 end
